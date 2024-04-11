@@ -22,9 +22,9 @@ func TestBuild_AddHeaders(t *testing.T) {
 
 	// Check that headers were added to req
 	assert.Equal(t, req.Header.Get(http.CanonicalHeaderKey("X-Forwarded-Proto")), "https",
-		"X-Forwarded-Proto should be present")
+		"The X-Forwarded-Proto should be present")
 	assert.Equal(t, req.Header.Get(http.CanonicalHeaderKey("X-Forwarded-Port")), "443",
-		"X-Forwarded-Port should be present")
+		"The X-Forwarded-Port should be present")
 
 }
 
