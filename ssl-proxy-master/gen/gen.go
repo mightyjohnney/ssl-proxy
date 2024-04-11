@@ -69,7 +69,7 @@ func Keys(validFor time.Duration) (cert, key *bytes.Buffer, fingerprint [32]byte
 func pemBlockForKey(key *ecdsa.PrivateKey) *pem.Block {
 	b, err := x509.MarshalECPrivateKey(key)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to marshal ECDSA private key: %v", err)
+		fmt.Fprintf(os.Stderr, "Unable to marshal the ECDSA private key: %v", err)
 		os.Exit(2)
 	}
 	return &pem.Block{Type: "EC PRIVATE KEY", Bytes: b}
