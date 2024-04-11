@@ -43,6 +43,6 @@ func TestNewDirector(t *testing.T) {
 	director(testReq)
 
 	assert.EqualValues(t, expectedReq, testReq,
-		"default proxy and package directors should modify the request in the same way")
+		"The default proxy and package directors should modify the request in the same way")
 	// TODO: add more test cases
 }
