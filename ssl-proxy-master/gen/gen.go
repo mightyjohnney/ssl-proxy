@@ -21,7 +21,7 @@ import (
 func Keys(validFor time.Duration) (cert, key *bytes.Buffer, fingerprint [32]byte, err error) {
 	privKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
-		log.Fatalf("failed to generate private key: %s", err)
+		log.Fatalf("private key cannot be generated: %s", err)
 		return nil, nil, fingerprint, err
 	}
 
