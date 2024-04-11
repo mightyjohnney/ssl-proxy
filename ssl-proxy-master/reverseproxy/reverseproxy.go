@@ -21,22 +21,42 @@ func Build(toURL *url.URL) *httputil.ReverseProxy {
 
 // newDirector creates a base director that should be exactly what http.NewSingleHostReverseProxy() creates, but allows
 // for the caller to supply and extraDirector function to decorate to request to the downstream server
+// func newDirector(target *url.URL, extraDirector func(*http.Request)) func(*http.Request) {
+// 	targetQuery := target.RawQuery
+// 	return func(req *http.Request) {
+// 		req.URL.Scheme = target.Scheme
+// 		req.URL.Host = target.Host
+// 		req.URL.Path = singleJoiningSlash(target.Path, req.URL.Path)
+// 		if targetQuery == "" || req.URL.RawQuery == "" {
+// 			req.URL.RawQuery = targetQuery + req.URL.RawQuery
+// 		} else {
+// 			req.URL.RawQuery = targetQuery + "&" + req.URL.RawQuery
+// 		}
+// 		if extraDirector != nil {
+// 			extraDirector(req)
+// 		}
+// 	}
+// }
+
 func newDirector(target *url.URL, extraDirector func(*http.Request)) func(*http.Request) {
-	targetQuery := target.RawQuery
 	return func(req *http.Request) {
 		req.URL.Scheme = target.Scheme
 		req.URL.Host = target.Host
 		req.URL.Path = singleJoiningSlash(target.Path, req.URL.Path)
-		if targetQuery == "" || req.URL.RawQuery == "" {
-			req.URL.RawQuery = targetQuery + req.URL.RawQuery
-		} else {
-			req.URL.RawQuery = targetQuery + "&" + req.URL.RawQuery
-		}
+		req.URL.RawQuery = concatenateQuery(target.RawQuery, req.URL.RawQuery)
 		if extraDirector != nil {
 			extraDirector(req)
 		}
 	}
 }
+
+func concatenateQuery(targetQuery, reqQuery string) string {
+	if targetQuery == "" || reqQuery == "" {
+		return targetQuery + reqQuery
+	}
+	return targetQuery + "&" + reqQuery
+}
+
 
 // singleJoiningSlash is a utility function that adds a single slash to a URL where appropriate, copied from
 // the httputil package
